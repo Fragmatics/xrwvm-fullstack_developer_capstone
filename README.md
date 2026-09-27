@@ -1,1 +1,1 @@
-# coding-project-template
+# Capstone Car Dealership Project
