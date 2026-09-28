@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import "./Login.css";
-import Header from '../Header/Header';
+import AuthLayout from '../Auth/AuthLayout';
 
 const Login = ({ onClose }) => {
 
@@ -41,8 +40,7 @@ const Login = ({ onClose }) => {
   
 
   return (
-    <div>
-      <Header/>
+    <AuthLayout eyebrow="Welcome back" title="Sign in to your account" subtitle="Log in to post reviews and share your dealership experience.">
     <div onClick={onClose}>
       <div
         onClick={(e) => {
@@ -50,24 +48,26 @@ const Login = ({ onClose }) => {
         }}
         className='modalContainer'
       >
-          <form className="login_panel" style={{}} onSubmit={login}>
+          <form className="space-y-5" onSubmit={login}>
               <div>
-              <span className="input_field">Username </span>
-              <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
+              <label htmlFor="username" className="form-label">Username</label>
+              <input type="text" id="username" name="username" placeholder="Enter your username" className="form-input" autoComplete="username" onChange={(e) => setUserName(e.target.value)}/>
               </div>
               <div>
-              <span className="input_field">Password </span>
-              <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>            
+              <label htmlFor="psw" className="form-label">Password</label>
+              <input id="psw" name="psw" type="password" placeholder="Enter your password" className="form-input" autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}/>
               </div>
-              <div>
-              <input className="action_button" type="submit" value="Login"/>
-              <input className="action_button" type="button" value="Cancel" onClick={()=>setOpen(false)}/>
+              <div className="flex gap-3 pt-1">
+              <input className="btn-primary flex-1 cursor-pointer" type="submit" value="Login"/>
+              <input className="btn-secondary cursor-pointer" type="button" value="Cancel" onClick={()=>setOpen(false)}/>
               </div>
-              <a className="loginlink" href="/register">Register Now</a>
+              <p className="text-center text-sm text-slate-600">
+                Don&apos;t have an account? <a className="font-semibold text-brand-600 hover:text-brand-700" href="/register">Register Now</a>
+              </p>
           </form>
       </div>
     </div>
-    </div>
+    </AuthLayout>
   );
 };
 

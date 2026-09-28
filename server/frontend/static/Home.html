@@ -1,82 +1,116 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="static/style.css">
-  <link rel="stylesheet" href="static/bootstrap.min.css">
-<script>
-
-const logout = async (e) => {
-// Build logout URL and Make GET request to logout endpoint
-  let logout_url = window.location.origin+"/djangoapp/logout";
-  const res = await fetch(logout_url, {
-    method: "GET",
-  });
-
-  const json = await res.json();
-  if (json) {
-	// Clear session storage and reload page
-    let username = sessionStorage.getItem('username');
-    sessionStorage.removeItem('username');
-    window.location.href = window.location.origin;
-    window.location.reload();
-	 // Notify user of logout
-    alert("Logging out "+username+"...") 
-  }
-  else {
-    alert("The user could not be logged out.")
-  }
-};
-
-let checkSession = ()=>{
-  let curr_user = sessionStorage.getItem("username");
-
-  if (curr_user && curr_user !== "") {
-    document.getElementById("loginlogout").innerHTML = 
-    '<span class="homepage_links">' + curr_user +'</span>' +
-    '<a class="homepage_links" onclick="logout()" href="/">Logout</a>'
-  } else {
-    document.getElementById("loginlogout").innerHTML = 
-    '<a class="homepage_links" href="/login">Login</a>'+
-    '<a class="homepage_links"  href="/register">Register</a>'
-  }
- }
-</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home | Best Cars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/tailwind.css">
+  <script src="/static/site.js"></script>
 </head>
-<body onload="checkSession()">
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-  <div class="container-fluid">
-    <h2 style="padding-right: 5%;">Dealerships</h2>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+<body class="flex min-h-screen flex-col">
+<header class="site-nav">
+  <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="/" class="flex items-center gap-2.5 text-white">
+      <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-700 shadow-lg shadow-brand-900/40">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M5 17a2 2 0 1 1-4 0v-4l2.5-5.5A2 2 0 0 1 5.3 6h13.4a2 2 0 0 1 1.8 1.5L23 13v4a2 2 0 1 1-4 0"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+      </span>
+      <span class="text-lg font-bold tracking-tight">Best<span class="text-brand-400">Cars</span></span>
+    </a>
+    <div class="hidden items-center gap-1 md:flex">
+      <a class="nav-link nav-link-active" href="/" aria-current="page">Home</a>
+      <a class="nav-link" href="/dealers">Dealers</a>
+      <a class="nav-link" href="/about">About Us</a>
+      <a class="nav-link" href="/contact">Contact Us</a>
+    </div>
+    <div class="hidden md:block" id="loginlogout" data-loginlogout></div>
+    <button id="menu-button" type="button" class="rounded-lg p-2 text-slate-300 hover:bg-white/10 hover:text-white md:hidden" aria-label="Toggle navigation" aria-expanded="false" onclick="toggleMenu()">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" style="font-size: larger;" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-        </li>
-      </ul>
-      <span class="navbar-text">
-        <div class="loginlink" id="loginlogout">
-        </div>
+  </nav>
+  <div id="mobile-menu" class="hidden border-t border-white/10 px-4 pb-4 pt-2 md:hidden">
+    <div class="flex flex-col gap-1">
+      <a class="nav-link nav-link-active" href="/" aria-current="page">Home</a>
+      <a class="nav-link" href="/dealers">Dealers</a>
+      <a class="nav-link" href="/about">About Us</a>
+      <a class="nav-link" href="/contact">Contact Us</a>
+    </div>
+    <div class="mt-3 border-t border-white/10 pt-3" data-loginlogout></div>
+  </div>
+</header>
+
+<main class="flex-1">
+  <section class="relative isolate overflow-hidden bg-slate-950">
+    <img src="/static/car_dealership.jpg" alt="Rows of cars at a Best Cars dealership" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-50">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950 via-slate-950/80 to-slate-950/20"></div>
+    <div class="mx-auto max-w-7xl px-4 py-28 sm:px-6 sm:py-36 lg:px-8">
+      <div class="max-w-2xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 backdrop-blur">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Trusted by drivers across North America
         </span>
+        <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+          Welcome to our <span class="bg-gradient-to-r from-brand-300 to-sky-300 bg-clip-text text-transparent">Dealerships!</span>
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-slate-300">
+          Find the right dealership with confidence. Compare dealers, read real reviews from real buyers, and share your own experience.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="/dealers" class="btn-primary px-6 py-3 text-base">View Dealerships <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="/about" class="btn px-6 py-3 text-base text-white ring-1 ring-inset ring-white/25 hover:bg-white/10">Learn more</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Why Best Cars</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Everything you need to choose a dealer</h2>
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      <div class="surface p-6">
+        <div class="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-600"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+        <h3 class="mt-5 text-lg font-semibold text-slate-900">Dealers nationwide</h3>
+        <p class="mt-2 leading-relaxed text-slate-600">Browse dealerships across the country and filter by state to find one near you.</p>
+      </div>
+      <div class="surface p-6">
+        <div class="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-600"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3 class="mt-5 text-lg font-semibold text-slate-900">Real customer reviews</h3>
+        <p class="mt-2 leading-relaxed text-slate-600">Read honest feedback from buyers about the cars they bought and the service they got.</p>
+      </div>
+      <div class="surface p-6">
+        <div class="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-600"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
+        <h3 class="mt-5 text-lg font-semibold text-slate-900">Sentiment insights</h3>
+        <p class="mt-2 leading-relaxed text-slate-600">Every review is analyzed automatically, so you can see at a glance how a dealer is rated.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-brand-900 px-8 py-12 sm:px-12">
+      <div class="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl"></div>
+      <div class="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Bought a car recently?</h2>
+          <p class="mt-2 text-brand-100">Create a free account and help other drivers by reviewing your dealership.</p>
+        </div>
+        <a href="/register" class="btn bg-white px-6 py-3 text-base text-brand-700 hover:bg-brand-50">Get started</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-slate-200 bg-white">
+  <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
+    <p>&copy; 2026 Best Cars. All rights reserved.</p>
+    <div class="flex gap-6">
+      <a href="/dealers" class="hover:text-slate-900">Dealers</a>
+      <a href="/about" class="hover:text-slate-900">About</a>
+      <a href="/contact" class="hover:text-slate-900">Contact</a>
     </div>
   </div>
-</nav>
-<div style="display: flex;flex-direction: column;">
-<div class="card" style="width: 50%;margin-top: 50px;align-self: center;">
-  <img src="static/car_dealership.jpg" class="card-img-top" alt="...">
-  <div class="banner">
-    <h5>Welcome to our Dealerships!</h5>
-    <a href="/dealers" class="btn" style="background-color: aqua;margin:10px">View Dealerships</a>
-  </div>
-</div>
-</div>
+</footer>
 </body>
 </html>
