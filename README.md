@@ -122,10 +122,10 @@ Django reads the backend URLs from `server/djangoapp/.env`, and environment vari
 | `backend_url` | `http://localhost:3030` | Node/Express dealers & reviews API |
 | `sentiment_analyzer_url` | `http://localhost:5050/` | Sentiment analysis microservice |
 
-The committed `.env` points at the Coursera lab URLs. For local development, change these values or override them, for example:
+The committed `.env` points at the local services, so local runs work without extra setup. To use deployed services instead (for example, in the Coursera lab), edit `.env` or override the values when you start Django:
 
 ```bash
-backend_url=http://localhost:3030 sentiment_analyzer_url=http://localhost:5050/ python manage.py runserver
+backend_url=https://<your-backend-host> sentiment_analyzer_url=https://<your-sentiment-host>/ python manage.py runserver
 ```
 
 ## Project structure
